@@ -7,7 +7,6 @@ app = Flask(__name__)
 # =================================================================
 
 # 1. Endpoint: /json_params_url (Parâmetros de Configuração)
-# Formato que a Inven!RA espera para listar os parâmetros configuráveis.
 JSON_PARAMS_URL = [
     {
         "name": "protocolo_config_json", 
@@ -16,7 +15,6 @@ JSON_PARAMS_URL = [
 ]
 
 # 2. Endpoint: /configuracao (Conteúdo de 'protocolo_config_json')
-# Simula o JSON que o Formador usa para definir o protocolo laboratorial.
 PROTOCOL_CONFIG_JSON = {
     "activity_title": "Titulacao de NaOH com HC1",
     "virtual_equipment": [
@@ -52,7 +50,6 @@ PROTOCOL_CONFIG_JSON = {
 }
 
 # 3. Endpoint: /analytics_list_url (Analytics Disponíveis)
-# Lista dos dados analíticos que o seu módulo é capaz de fornecer (quantitativos e qualitativos).
 ANALYTICS_LIST_JSON = {
     "quantAnalytics": [
         {"name": "protocol_errors_count", "type": "integer"},
@@ -68,7 +65,6 @@ ANALYTICS_LIST_JSON = {
 }
 
 # 4. JSON de Dados Analíticos Atuais (Resposta de /analytics_url - GET)
-# Simula um estado atual da atividade para a Inven!RA puxar (pull).
 CURRENT_ANALYTICS_DATA = {
     "activity_instance_id": "INST_001",
     "data": {
@@ -81,8 +77,14 @@ CURRENT_ANALYTICS_DATA = {
 }
 
 # =================================================================
-# IMPLEMENTAÇÃO DOS 5 WEB SERVICES RESTFUL (Endpoints)
+# IMPLEMENTAÇÃO DAS ROTAS (Endpoints)
 # =================================================================
+
+# NOVA ROTA: 0. Rota Raiz (/) - Necessária para verificar que o servidor está vivo
+@app.route('/', methods=['GET'])
+def root_route():
+    # Retorna uma mensagem de status simples no URL base
+    return jsonify({"status": "Activity Provider is ACTIVE", "message": "Aceda a /deploy_url ou /json_params_url para mais dados.", "api_version": "1.0"})
 
 # 1. Parâmetros de Configuração (URL Fixo: json_params_url)
 @app.route('/json_params_url', methods=['GET'])
