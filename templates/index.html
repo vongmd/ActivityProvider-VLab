@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -12,12 +12,12 @@
             font-family: 'Inter', sans-serif; 
             background-color: #0b1120; /* Cor de fundo escura */
         }
-        /* Define a cor de fundo padrão para cinzento e a cor de hover para índigo */
+        /* Estilo unificado para os botões */
         .link-button {
-            background-color: #4b5563; /* Tailwind gray-600 */
+            background-color: #4b5563; /* Cinzento base */
         }
         .link-button:hover {
-            background-color: #4f46e5; /* Tailwind indigo-600 */
+            background-color: #4f46e5; /* Azul/Índigo no hover */
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
             transform: translateY(-1px);
         }
@@ -36,36 +36,33 @@
              onerror="this.onerror=null;this.src='https://placehold.co/600x300/1e293b/a5b4fc?text=Image+URL+Not+Found'">
 
         <div class="p-4 bg-gray-700 rounded-lg mb-6">
-            <!-- A variável status será substituída pelo Flask -->
             <p class="text-green-400 text-lg font-semibold">{{ status }}</p>
         </div>
         
-        <!-- CORRIGIDO: Cor do texto das instruções em branco -->
         <p class="text-sm text-white mb-4 font-bold">
             Clique nos links abaixo para verificar os 5 Web Services JSON exigidos pela Inven!RA:
         </p>
 
         <div class="space-y-3">
-            <!-- NOTA: Todos usam a classe link-button, que define a cor base. -->
-            <!-- As cores bg-gray-600, etc., foram removidas para usar apenas o estilo CSS comum. -->
+            <!-- NOTA: O atributo target="_blank" força a abertura em novo separador -->
             
-            <a href="/deploy_url" class="link-button block w-full px-4 py-3 text-white font-semibold rounded-lg transition duration-150 transform text-center no-underline">
+            <a href="/deploy_url" target="_blank" class="link-button block w-full px-4 py-3 text-white font-semibold rounded-lg transition duration-150 transform text-center no-underline">
                 1. Status de Deploy: /deploy_url
             </a>
             
-            <a href="/json_params_url" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
+            <a href="/json_params_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
                 2. Parâmetros de Configuração: /json_params_url
             </a>
             
-            <a href="/analytics_list_url" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
+            <a href="/analytics_list_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
                 3. Analytics Disponíveis: /analytics_list_url
             </a>
             
-            <a href="/analytics_url" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
+            <a href="/analytics_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
                 4. Analytics Atuais (GET): /analytics_url
             </a>
             
-            <a href="/configuracao" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
+            <a href="/configuracao" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
                 5. Configuração da Atividade: /configuracao
             </a>
         </div>
