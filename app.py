@@ -65,7 +65,46 @@ class RuleFactory:
             raise ValueError(f"Tipo de regra desconhecido: {action_type}")
 
 # =================================================================
-# DADOS MOCK (Simulação de Base de Dados)
+# ENGINE (O Motor Central que usa a Fábrica)
+# =================================================================
+
+class ActivityProvider_Engine:
+    def __init__(self):
+        # Mapeamento: step_id -> Objeto ValidationRule
+        self.active_rules = {} 
+
+    def carregar_protocolo(self, json_config):
+        """
+        Lê o JSON e usa a FACTORY para criar os objetos reais.
+        """
+        self.active_rules.clear()
+        steps = json_config.get('protocol_steps', [])
+        
+        print(f"--- ENGINE: A carregar {len(steps)} passos ---")
+        for step in steps:
+            rule_data = step.get('validation_rule')
+            step_id = step.get('id')
+            
+            # AQUI: O Motor usa a Fábrica (Factory Method) para obter o objeto
+            try:
+                rule_object = RuleFactory.create_rule(rule_data)
+                self.active_rules[step_id] = rule_object
+                print(f"Passo {step_id}: Regra '{type(rule_object).__name__}' criada com sucesso.")
+            except Exception as e:
+                print(f"Erro ao criar regra para {step_id}: {e}")
+
+    def processar_evento(self, step_id, user_action):
+        """
+        Delega a validação para o objeto de regra correto.
+        (Preparado para uso futuro quando a rota de eventos for implementada)
+        """
+        rule = self.active_rules.get(step_id)
+        if rule:
+            return rule.validate(user_action)
+        return False
+
+# =================================================================
+# DADOS MOCK (Simulação de Base de Dados / Configuração)
 # =================================================================
 
 JSON_PARAMS_URL = [ {"name": "protocolo_config_json", "type": "application/json"} ]
@@ -97,7 +136,18 @@ ANALYTICS_LIST_JSON = {
 }
 
 # =================================================================
-# ROTAS DA API (Implementação dos Requisitos Inven!RA)
+# INICIALIZAÇÃO DO SISTEMA
+# =================================================================
+
+# Instanciamos o motor globalmente
+engine = ActivityProvider_Engine()
+
+# Carregamos a configuração inicial no arranque
+# Isto garante que as regras são criadas via Factory assim que o servidor liga
+engine.carregar_protocolo(PROTOCOL_CONFIG_JSON)
+
+# =================================================================
+# ROTAS DA API (Web Services Inven!RA)
 # =================================================================
 
 @app.route('/', methods=['GET'])
@@ -106,18 +156,9 @@ def root_route():
 
 @app.route('/documentacao', methods=['GET'])
 def documentation_page():
-    # Inicializa a Fábrica apenas para demonstrar no log/consola que está a funcionar
-    print("--- VIRTUAL LAB: A carregar regras via Factory Method ---")
-    try:
-        for step in PROTOCOL_CONFIG_JSON['protocol_steps']:
-            rule = RuleFactory.create_rule(step['validation_rule'])
-            print(f"Regra criada: {type(rule).__name__}")
-    except Exception as e:
-        print(f"Erro na fábrica: {e}")
-        
-    return render_template('index.html', 
-                           title="Virtual Lab Assistant (AP)", 
-                           status="Factory Method Active & Ready")
+    # Mostra o estado do motor (quantas regras foram criadas pela Factory)
+    status_msg = f"Factory Method Ativo: {len(engine.active_rules)} regras de validação carregadas no Engine."
+    return render_template('index.html', title="Virtual Lab Assistant (AP)", status=status_msg)
 
 # 1. Configuração (GET)
 @app.route('/configuracao', methods=['GET'])
@@ -133,24 +174,25 @@ def get_config_params():
 @app.route('/deploy_url', methods=['GET'])
 def deploy_status():
     # Recebe user_url?id=... (conforme requisito)
-    return jsonify({"status": "ready", "access_url": "https://virtual-lab-assistant.herokuapp.com/lab"})
+    return jsonify({"status": "ready", "access_url": "https://activityprovider-vlab.onrender.com/lab"})
 
 # 4. Analytics List (GET)
 @app.route('/analytics_list_url', methods=['GET'])
 def get_analytics_list():
     return jsonify(ANALYTICS_LIST_JSON)
 
-# 5. Analytics Data (CORRIGIDO: POST em vez de GET)
+# 5. Analytics Data (POST ESTRITO - Conforme Especificação)
 @app.route('/analytics_url', methods=['POST'])
 def get_activity_analytics():
     """
     Recebe um POST com {"activityID": "..."}
     Retorna analíticos de todos os alunos.
     """
-    data = request.get_json()
-    activity_id = data.get('activityID') if data else "unknown"
+    # Tenta ler o JSON enviado pela Inven!RA
+    data = request.get_json(silent=True)
+    activity_id = data.get('activityID', "unknown") if data else "unknown"
     
-    # Simulação de resposta conforme especificação (ponto 4 do documento de requisitos)
+    # Simulação de resposta conforme especificação
     mock_analytics_response = [
         {
             "inveniraStdID": 1001,
