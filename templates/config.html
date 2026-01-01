@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração da Atividade</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: #f9f9f9; }
+        .tag { display: inline-block; background: #e1ecf4; color: #39739d; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold; }
+        .btn { display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        .back-link { display: block; margin-top: 20px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Configuração: {{ config.activity_title }}</h1>
+    
+    <p>Esta é a interface de configuração da atividade (Activity Provider).</p>
+    
+    <h2>Passos do Protocolo</h2>
+    {% for step in config.protocol_steps %}
+    <div class="card">
+        <h3>Passo {{ step.id }}: {{ step.description }}</h3>
+        <p><strong>Regra de Validação:</strong></p>
+        <ul>
+            <li>Tipo de Ação: <span class="tag">{{ step.validation_rule.action }}</span></li>
+            
+            {% if step.validation_rule.equipment %}
+            <li>Equipamento: {{ step.validation_rule.equipment }}</li>
+            {% endif %}
+            
+            {% if step.validation_rule.volume_ml %}
+            <li>Volume Alvo: {{ step.validation_rule.volume_ml }} ml (±{{ step.validation_rule.tolerance }})</li>
+            {% endif %}
+
+            {% if step.validation_rule.with %}
+            <li>Líquido: {{ step.validation_rule.with }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endfor %}
+
+    <a href="/" class="back-link">← Voltar à Home</a>
+</body>
+</html>
