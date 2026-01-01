@@ -1,71 +1,66 @@
-
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <!-- Inclui Tailwind CSS para estilização rápida -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0b1120; /* Cor de fundo escura */
+            background-color: #0b1120;
+            height: 100vh; /* Garante altura total do ecrã */
+            overflow: hidden; /* Evita scroll desnecessário se possível */
         }
-        /* Estilo unificado para os botões */
-        .link-button {
-            background-color: #4b5563; /* Cinzento base */
-        }
+        .link-button { background-color: #4b5563; }
         .link-button:hover {
-            background-color: #4f46e5; /* Azul/Índigo no hover */
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            background-color: #4f46e5;
             transform: translateY(-1px);
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="w-full max-w-lg bg-gray-800 rounded-xl shadow-2xl p-6 md:p-10 text-center border border-indigo-500/50 transition-all duration-300">
+<body class="flex items-center justify-center h-screen w-screen p-2">
+    
+    <div class="w-full max-w-md bg-gray-800 rounded-xl shadow-2xl p-5 border border-indigo-500/50 flex flex-col justify-center">
         
-        <h1 class="text-3xl font-bold text-indigo-400 mb-2">Activity Provider</h1>
-        <h2 class="text-xl text-white mb-6">"Virtual Lab Assistant"</h2>
+        <h1 class="text-2xl font-bold text-indigo-400 text-center">Activity Provider</h1>
+        <h2 class="text-md text-gray-300 text-center mb-3">"Virtual Lab Assistant"</h2>
 
-        <!-- Imagem de Placeholder -->
-        <img src="https://placehold.co/600x300/1e293b/a5b4fc?text=Virtual+Lab+Assistant" 
-             alt="Imagem de laboratório virtual" 
-             class="w-full rounded-lg shadow-lg mb-6 border-2 border-indigo-400/50 object-cover"
-             onerror="this.onerror=null;this.src='https://placehold.co/600x300/1e293b/a5b4fc?text=Image+URL+Not+Found'">
+        <div class="flex justify-center mb-3">
+            <img src="{{ url_for('static', filename='VLA.png') }}" 
+                 alt="Logo VLA" 
+                 class="h-32 w-auto rounded-lg shadow-md border border-indigo-400/30 object-contain">
+        </div>
 
-        <div class="p-4 bg-gray-700 rounded-lg mb-6">
-            <p class="text-green-400 text-lg font-semibold">{{ status }}</p>
+        <div class="py-2 bg-gray-700 rounded mb-3 text-center">
+            <p class="text-green-400 text-sm font-semibold">{{ status }}</p>
         </div>
         
-        <p class="text-sm text-white mb-4 font-bold">
-            Clique nos links abaixo para verificar os 5 Web Services JSON exigidos pela Inven!RA:
+        <p class="text-xs text-gray-400 text-center mb-2">
+            Web Services JSON para Inven!RA:
         </p>
 
-        <div class="space-y-3">
-            <!-- NOTA: O atributo target="_blank" força a abertura em novo separador -->
-            
-            <a href="/deploy_url" target="_blank" class="link-button block w-full px-4 py-3 text-white font-semibold rounded-lg transition duration-150 transform text-center no-underline">
-                1. Status de Deploy: /deploy_url
+        <div class="space-y-2">
+            <a href="/deploy_url" target="_blank" class="link-button block w-full py-2 px-4 text-white text-sm font-medium rounded text-center no-underline transition">
+                1. Status: /deploy_url
             </a>
             
-            <a href="/json_params_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
-                2. Parâmetros de Configuração: /json_params_url
+            <a href="/json_params_url" target="_blank" class="link-button block w-full py-2 px-4 text-white text-sm font-medium rounded text-center no-underline transition">
+                2. Parâmetros: /json_params_url
             </a>
             
-            <a href="/analytics_list_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
-                3. Analytics Disponíveis: /analytics_list_url
+            <a href="/analytics_list_url" target="_blank" class="link-button block w-full py-2 px-4 text-white text-sm font-medium rounded text-center no-underline transition">
+                3. Analytics List: /analytics_list_url
             </a>
             
-           <a href="/analytics_url" 
-   onclick="alert('Atenção: Este endpoint aceita apenas pedidos POST (conforme especificação da Inven!RA).\n\nPara testar, utilize o script \'teste_api.py\' ou o Postman enviando um JSON com { \'activityID\': ... }.'); return false;" 
-   class="link-button block w-full text-center px-4 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-300 shadow-md border border-gray-500">
-    4. Analytics Atuais (POST): /analytics_url 🔒
-</a>
+            <a href="/analytics_url" 
+               onclick="alert('Atenção: Este endpoint aceita apenas POST.\nUtilize o teste_api.py.'); return false;" 
+               class="link-button block w-full py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded text-center border border-gray-500 shadow-sm transition">
+                4. Analytics Data (POST) 🔒
+            </a>
             
-            <a href="/configuracao" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
-                5. Configuração da Atividade: /configuracao
+            <a href="/configuracao" target="_blank" class="link-button block w-full py-2 px-4 text-white text-sm font-medium rounded text-center no-underline transition">
+                5. Configuração (HTML): /configuracao
             </a>
         </div>
         
