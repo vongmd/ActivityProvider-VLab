@@ -58,9 +58,11 @@
                 3. Analytics Disponíveis: /analytics_list_url
             </a>
             
-            <a href="/analytics_url" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
-                4. Analytics Atuais (GET): /analytics_url
-            </a>
+           <a href="/analytics_url" 
+   onclick="alert('Atenção: Este endpoint aceita apenas pedidos POST (conforme especificação da Inven!RA).\n\nPara testar, utilize o script \'teste_api.py\' ou o Postman enviando um JSON com { \'activityID\': ... }.'); return false;" 
+   class="link-button block w-full text-center px-4 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-300 shadow-md border border-gray-500">
+    4. Analytics Atuais (POST): /analytics_url 🔒
+</a>
             
             <a href="/configuracao" target="_blank" class="link-button block w-full px-4 py-3 text-white rounded-lg transition duration-150 transform text-center no-underline">
                 5. Configuração da Atividade: /configuracao
