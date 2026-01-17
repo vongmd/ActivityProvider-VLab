@@ -10,7 +10,7 @@ import sys
 url_local = 'http://127.0.0.1:5000/analytics_url'
 
 # --- MODO 2: TESTE ONLINE (No Render) ---
-url_online = 'https://activityprovider-vlab.onrender.com/analytics_url'
+  url_online = 'https://activityprovider-vlab.onrender.com/analytics_url'
 
 # ==============================================================================
 # ESCOLHA O ALVO (Descomenta o que queres usar)
